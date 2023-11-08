@@ -38,7 +38,5 @@ namespace Entities.Models.Auth
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        //public ICollection<string> Roles { get; set; }
-
     }
 }

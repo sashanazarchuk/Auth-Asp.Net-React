@@ -56,7 +56,7 @@ namespace Server.Services
 
         public static void ConfigureIdentity(this IServiceCollection services)
         {
-            services.AddIdentityCore<User>(options =>
+            services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.Stores.MaxLengthForKeys = 128;
                 options.Password.RequireDigit = false;

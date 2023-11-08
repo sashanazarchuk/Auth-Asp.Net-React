@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Entities.Models.Enitites;
 using Microsoft.AspNetCore.Identity;
+using Entities.Configuration;
 
 namespace Entities.Data
 {
-    public class AppDbContext : IdentityDbContext<User>
+    public class AppDbContext : IdentityDbContext<User> 
     {
         public AppDbContext(DbContextOptions options) : base(options) { }
 
@@ -42,6 +43,8 @@ namespace Entities.Data
                 .HasOne(c=>c.Country)
                 .WithMany(u => u.Products)
                 .HasForeignKey(c => c.CountryId);
+
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
         }
 
         public DbSet<Country> Countries { get; set; }

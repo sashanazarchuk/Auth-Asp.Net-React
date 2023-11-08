@@ -11,13 +11,13 @@ namespace BusinessLogic.Services.AuthServices
     {
         private readonly AppDbContext context;
         private readonly UserManager<User> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public RegisterService(AppDbContext context, UserManager<User> userManager)
+        public RegisterService(AppDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.context = context;
             this.userManager = userManager;
-
-
+            this.roleManager = roleManager;
         }
         public async Task<IdentityResult> Register(RegisterViewModel model)
         {
@@ -38,6 +38,15 @@ namespace BusinessLogic.Services.AuthServices
             };
 
             var result = await userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                //Add user role "User"
+                var userRole = await roleManager.FindByNameAsync("User");
+                if (userRole != null)
+                {
+                    await userManager.AddToRoleAsync(user, userRole.Name);
+                }
+            }
 
             return result;
         }

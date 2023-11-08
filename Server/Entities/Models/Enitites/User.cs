@@ -23,6 +23,6 @@ namespace Entities.Models.Enitites
         public City City { get; set; }
 
         public virtual ICollection<CartItem> CartItems { get; set; }
-
+       
     }
 }
