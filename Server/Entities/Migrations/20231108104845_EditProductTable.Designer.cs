@@ -3,6 +3,7 @@ using System;
 using Entities.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Entities.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231108104845_EditProductTable")]
+    partial class EditProductTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,9 +111,6 @@ namespace Entities.Migrations
 
                     b.Property<string>("Image")
                         .HasColumnType("text");
-
-                    b.Property<decimal>("InitialPrice")
-                        .HasColumnType("numeric");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -239,13 +239,13 @@ namespace Entities.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "adbe0f5e-85fc-49b4-9d86-904161a666a1",
+                            Id = "defbe339-12bf-429a-b1c4-944c6ae511ed",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "05ff2c8e-9652-406a-99b2-a288872f9f81",
+                            Id = "e8071681-1157-4932-b40c-9f6f47ae0418",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

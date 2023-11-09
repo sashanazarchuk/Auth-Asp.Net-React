@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { ShoppingBagIcon } from '@heroicons/react/24/outline'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import http from "../http_common";
 import { IProduct } from "../ProductCart/types";
- 
+
 
 const DefaultHeader = ({ }) => {
 
@@ -68,6 +68,33 @@ const DefaultHeader = ({ }) => {
         }
     };
 
+    const [isDeleteLinkVisible, setIsDeleteLinkVisible] = useState(false);
+    const checkUserRole = async () => {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            const headers = {
+                Authorization: `Bearer ${token}`,
+            };
+
+            try {
+                const response = await http.get("api/User/GetUserRole", {
+                    method: "GET",
+                    headers: headers,
+                });
+
+                if (response.data === "Admin") {
+                    setIsDeleteLinkVisible(true);
+                }
+            } catch (error) {
+                console.error("Помилка при отриманні ролі користувача:", error);
+            }
+        }
+    };
+
+    useEffect(() => {
+        checkUserRole();
+    }, []);
 
 
     return (
@@ -88,6 +115,13 @@ const DefaultHeader = ({ }) => {
                             <Link to="/productlist" className="ml-4 text-gray-800 hover:text-indigo-300">
                                 Products
                             </Link>
+                            {isDeleteLinkVisible && (
+                                < Link to="/create-product" className="ml-4 text-gray-800 hover:text-indigo-300">
+                                    Create Product
+                                </Link>
+
+                            )}
+
                         </div>
                         <div className="flex ml-auto mt-4">
                             <div className="relative flex">
@@ -160,7 +194,7 @@ const DefaultHeader = ({ }) => {
                     </div>
                     <hr className="my-2 border-t-2 border-gray-200  " />
                 </div>
-            </div>
+            </div >
         </>
     );
 }

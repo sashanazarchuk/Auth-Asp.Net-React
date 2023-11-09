@@ -10,6 +10,8 @@ import ProductList from './ProductCart/ProductList';
 import Cart from './ProductCart/Cart';
 import SearchResult from './ProductCart/SearchResult';
 import ProductPage from './ProductCart/ProductPage';
+import CreateProduct from './Admin/CreateProduct';
+import EditProduct from './Admin/EditProduct';
 
 
 
@@ -19,6 +21,12 @@ function App() {
 
       <DefaultHeader />
       <Routes>
+        {/* 
+        <Route path="/admin" element={<Sidebar />}>
+          <Route path="create-product" element={<CreateProduct />} />
+        </Route> */}
+
+
         <Route path="/" element={<Registration />} />
         <Route path="/login" element={<Login />} />
         <Route path="/user" element={<User />} />
@@ -27,8 +35,13 @@ function App() {
         <Route path="cart" element={<Cart />} />
         <Route path="search-result" element={<SearchResult />} />
         <Route path="product/:id" element={<ProductPage />} />
+
+        <Route path="create-product" element={<CreateProduct />} />
+        <Route path="edit-product/:id" element={<EditProduct />} />
       </Routes>
       <DefaultFooter />
+
+
     </>
   );
 }

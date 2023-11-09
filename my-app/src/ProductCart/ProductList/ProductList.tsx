@@ -17,6 +17,8 @@ const ProductList = () => {
     const [sortType, setSortType] = useState("Sort-L-H");
     // Fetch the list of products when the component mounts
 
+    const [isDeleteButtonVisible, setIsDeleteButtonVisible] = useState(false);
+
     const fetchProducts = async () => {
         try {
             const response = await http.get("/api/Product/GetAllProduct");
@@ -210,6 +212,63 @@ const ProductList = () => {
         fetchProducts();
     };
 
+
+    const checkUserRole = async () => {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            const headers = {
+                Authorization: `Bearer ${token}`,
+            };
+
+            try {
+                const response = await http.get("api/User/GetUserRole", {
+                    method: "GET",
+                    headers: headers,
+                });
+
+                if (response.data === "Admin") {
+                    setIsDeleteButtonVisible(true);
+                }
+            } catch (error) {
+                console.error("Error getting role:", error);
+            }
+        }
+    };
+
+    useEffect(() => {
+        checkUserRole();
+    }, []);
+
+
+    const deleteProduct = async (productId: number) => {
+        // Check if the user is authorized and has delete rights
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            console.error("JWT token not found. You are not authorized.");
+            return;
+        }
+
+        // Set configuration for HTTP request with token
+        const headers = {
+            Authorization: `Bearer ${token}`,
+        };
+
+        try {
+            // Make an HTTP request to remove the product by its ID
+            await http.delete(`/api/Product/Delete-Product/${productId}`, {
+                headers: headers,
+            });
+            //Updating the product list
+            fetchProducts();
+            console.log(`Product ${productId} deleted successfully.`);
+        } catch (error) {
+            console.error("Error removing product:", error);
+        }
+    };
+
+
     return (
         <>
             <div className="bg-white">
@@ -338,8 +397,28 @@ const ProductList = () => {
                                         onClick={() => addToCart(product.productId)}
                                         className="mt-2 bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 cursor-pointer"
                                     >
-                                        Add to bag
+                                        Add to Bag
                                     </button>
+
+                                    {isDeleteButtonVisible && (
+                                        <div className="mt-2 flex items-center">
+                                            <button
+                                                onClick={() => deleteProduct(product.productId)}
+                                                className="bg-red-500 text-white rounded-md py-2 px-4 hover:bg-red-600 cursor-pointer"
+                                            >
+                                                Delete
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    navigate(`/edit-product/${product.productId}`);
+                                                }}
+                                                className="bg-yellow-500 text-white rounded-md py-2 px-4 ml-2 hover:bg-yellow-600 cursor-pointer"
+                                            >
+                                                Edit
+                                            </button>
+                                        </div>
+                                    )}
+
                                 </div>
                             ))}
                         </div>

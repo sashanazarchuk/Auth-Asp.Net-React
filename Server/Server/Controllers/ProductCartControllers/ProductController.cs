@@ -1,8 +1,7 @@
 ﻿using BusinessLogic.DTOs.ProductCartDTOs;
 using BusinessLogic.Interfaces.ProductCartServices;
-using BusinessLogic.Services.ProductServices;
 using Contracts;
-using MailKit.Search;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers.ProductCartControllers
@@ -64,6 +63,82 @@ namespace Server.Controllers.ProductCartControllers
                 return BadRequest("An error occurred while receiving the current product"); // Return a Bad Request (400) response in case of an exception
             }
         }
+
+        // GET: api/products/Create-Product
+        // Creatind a new Product in Db
+        [Authorize(Roles = "Admin")]
+        [HttpPost("Create-Product")]
+        public async Task<IActionResult> Create([FromBody] ProductDto product)
+        {
+            try
+            {
+                await service.CreateProduct(product);// Call the service to create the product in the database.
+                return Ok(); // Return successfuly response
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("An error occurred while creating the current product: " + ex.Message);
+                return BadRequest("An error occurred while creating the current product"); // Return a Bad Request (400) response in case of an exception
+            }
+
+        }
+
+
+        // DELETE: api/products/Delete-Product
+        // Deleting a Product from Db
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("Delete-Product/{productId}")]
+        public async Task<IActionResult> Delete([FromRoute] int productId)
+        {
+            try
+            {
+                await service.DeleteProduct(productId);// Call the service to delete the product from the database.
+                return Ok(); // Return successfuly response
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("An error occurred while deleting the current product: " + ex.Message);
+                return BadRequest("An error occurred while deleting the current product"); // Return a Bad Request (400) response in case of an exception
+            }
+
+        }
+
+        // PUT: api/products/Edit-Product
+        // Editing a Product in Db
+        [Authorize(Roles = "Admin")]
+        [HttpPut("Edit-Product")]
+        public async Task<IActionResult> EditProduct([FromBody] ProductDto product)
+        {
+            try
+            {
+                await service.EditProduct(product);// Call the service to edit the product in the database.
+                return Ok(); // Return successfuly response
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("An error occurred while editing the current product: " + ex.Message);
+                return BadRequest("An error occurred while editing the current product"); // Return a Bad Request (400) response in case of an exception
+            }
+
+        }
+
+        // PUT: api/products/Discount-Product
+        // Added Discount for Product
+        [Authorize(Roles = "Admin")]
+        [HttpPut("Discount-Product/{productId}")]
+        public async Task<IActionResult> ApplyDiscount(int productId, decimal discount)
+        {
+            try
+            {
+                await service.Discount(productId, discount); // Call the service to make discount for product in the database
+                return Ok("Discount successfully applied.");// Return successfuly response
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest("Error: " + ex.Message);
+            }
+        }
+
 
         // GET: api/products/Search?searchText={searchText}
         // Search for products based on a provided search text.

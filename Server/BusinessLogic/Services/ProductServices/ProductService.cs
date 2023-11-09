@@ -3,6 +3,7 @@ using BusinessLogic.DTOs.ProductCartDTOs;
 using BusinessLogic.Interfaces.ProductCartServices;
 using Contracts;
 using Entities.Data;
+using Entities.Models.Enitites;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLogic.Services.ProductServices
@@ -122,6 +123,70 @@ namespace BusinessLogic.Services.ProductServices
                 .ToListAsync();
 
             return mapper.Map<IEnumerable<ProductDto>>(filteredProducts); // Map and return the filtered products as ProductDto.
+        }
+
+        public async Task<ProductDto> CreateProduct(ProductDto product)
+        {
+            // Map the ProductDto to a Product entity
+            var result = mapper.Map<Product>(product);
+
+            // Add the new product to the context and save the changes
+            await context.Products.AddAsync(result);
+            await context.SaveChangesAsync();
+
+            // Map the created Product entity back to a ProductDto and return it
+            return mapper.Map<ProductDto>(result);
+        }
+
+        public async Task DeleteProduct(int id)
+        {
+            // Find the product by Id
+            var product = await context.Products.FindAsync(id);
+
+            if (product != null)
+            {
+                // If the product exists, remove it from the context and save the changes
+                context.Products.Remove(product);
+                await context.SaveChangesAsync();
+            }
+        }
+        public async Task EditProduct(ProductDto product)
+        {
+            // Find the existing product data 
+            var data = await context.Products.AsNoTracking().FirstOrDefaultAsync(w => w.ProductId == product.ProductId);
+
+            if (data != null)
+            {
+                // Update the product entity with the new data and save the changes
+                context.Products.Update(mapper.Map<Product>(product));
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public async Task Discount(int productId, decimal discount)
+        {   
+            // Find the product by its Id
+            var product = await context.Products.FindAsync(productId);
+
+            if (product != null)
+            {
+                if (discount > 0)
+                {
+                    // Calculation of the new price with a discount
+                    decimal discountedPrice = product.Price - (product.Price * discount / 100);
+                    product.Discount = discount;
+                    product.Price = discountedPrice;
+                }
+                else
+                {
+                    // If there is no discount, we set the original price
+                    product.Discount = 0;
+                    product.Price = product.InitialPrice; 
+                }
+
+                // Save the changes to the database
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

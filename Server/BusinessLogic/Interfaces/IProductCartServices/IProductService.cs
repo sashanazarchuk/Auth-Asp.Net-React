@@ -11,6 +11,11 @@ namespace BusinessLogic.Interfaces.ProductCartServices
     {
         Task<IEnumerable<T>> GetAllProduct();
         T GetById(int id);
+        Task<T> CreateProduct(T t);
+        Task EditProduct(T t);
+        Task DeleteProduct(int id);
+
+        Task Discount(int productId, decimal discount);
         Task<IEnumerable<T>> Search(string search);
 
         Task<IEnumerable<T>> SortLtoH();

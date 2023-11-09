@@ -25,6 +25,15 @@ namespace Server.Controllers.AuthControllers
             return Ok(result);
         }
 
-
+        [HttpGet("GetUserRole")]
+        public IActionResult GetUserRole()
+        {
+            var user = HttpContext.User;
+            if (user.IsInRole("Admin"))
+            {
+                return Ok("Admin");
+            }
+            return Ok("user");
+        }
     }
 }

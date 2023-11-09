@@ -6,13 +6,16 @@ export interface IProduct{
     name: string;
     description: string;
     image: string;
+    initialPrice:number;
     price: number;
+    discount:number
     brand:string;
     appointment:string;
     size:string;
     color:string;
     country:string;
-    isMale:boolean;
+    countryId:number;
+    gender:string;
 }
 
 export interface ICartItem{

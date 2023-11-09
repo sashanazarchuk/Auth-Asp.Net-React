@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.DTOs.AuthDTOs;
 using BusinessLogic.DTOs.ProductCartDTOs;
+using Entities.Data;
 using Entities.Models.Enitites;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace BusinessLogic.Profile
 {
     public class ApplicationProfile : AutoMapper.Profile
     {
+        //private readonly AppDbContext context;
         public ApplicationProfile()
         {
             CreateMap<User, UserDto>()
@@ -26,7 +28,8 @@ namespace BusinessLogic.Profile
             //configured product mapping
             CreateMap<Product, ProductDto>().ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name));
             CreateMap<ProductDto, Product>();
-
+            
+           
         }
     }
 }

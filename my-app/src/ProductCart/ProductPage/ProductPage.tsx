@@ -6,19 +6,22 @@ import { IProduct } from "../types";
 
 const ProductPage = () => {
     const { id } = useParams();
-    const navigate= useNavigate();
+    const navigate = useNavigate();
     const [model, setModel] = useState<IProduct>({
         productId: 0,
         name: " ",
         description: " ",
         image: " ",
+        initialPrice: 0,
         price: 0,
+        discount: 0,
         brand: " ",
         appointment: " ",
         size: " ",
         country: " ",
+        countryId:0,
         color: " ",
-        isMale: true,
+        gender: " ",
 
     });
 
@@ -65,7 +68,7 @@ const ProductPage = () => {
                             />
                         </div>
                     </div>
-                    
+
 
                     {/* Product info */}
                     <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
@@ -84,6 +87,8 @@ const ProductPage = () => {
                                 <p><span className="font-medium">Country:</span> {model.country}</p>
                                 <p><span className="font-medium">Size:</span> {model.size}</p>
                                 <p><span className="font-medium">Color:</span> {model.color}</p>
+                                <p><span className="font-medium">Gender:</span> {model.gender}</p>
+                                
                             </div>
 
 
